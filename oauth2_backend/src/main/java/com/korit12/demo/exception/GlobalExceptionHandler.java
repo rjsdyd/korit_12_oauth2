@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidation(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult().getFieldErrors().stream().map(fe -> fe.getDefaultMessage())
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .map(fe -> fe.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
         log.warn("유효성 오류 : {}", e.getMessage());
@@ -30,6 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException (Exception e) {
         log.error("서버 오류 : {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생함. 잠시후 다시 시도해주세요.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("서버 오류가 발생함. 잠시후 다시 시도해주세요.");
     }
 }

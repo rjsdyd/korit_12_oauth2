@@ -26,6 +26,7 @@ public class UserService {
         // 비밀번호는 input 창을 통해서 string으로 넘어왔을 것.
         String encodePassword = passwordEncoder.encode(dto.getPassword());
         User user = User.createLocalUser(dto.getEmail(), encodePassword, dto.getName());
+        userRepository.save(user);
 
         // User field 자체에는 Token이 없고 Response에서 붙어서 보낼 것임.
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());

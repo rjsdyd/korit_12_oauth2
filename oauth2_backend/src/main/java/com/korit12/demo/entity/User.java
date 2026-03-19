@@ -30,8 +30,8 @@ public class User {
     @Enumerated
     private Role role = Role.ROLE_USER;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OAuth2User> oAuth2Users = new ArrayList<>();
@@ -39,8 +39,9 @@ public class User {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @PrePersist
     protected void onCreate() {
-        this.createAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     // 일반 회원 가입용
