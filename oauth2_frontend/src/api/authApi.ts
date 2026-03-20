@@ -40,10 +40,23 @@ export const signupApi = async (data:SignupRequest) : Promise<AuthResponse> => {
 }
 
 // 일반 로그인
-export const loginApi = async (data: LoginRequest): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('api/auth/login', data);
-  return response.data;
-}
+export const loginApi = async (data: LoginRequest) => {
+  try {
+    const response = await axios.post('/api/login', data);
+    return response.data;
+  } catch (error: unknown) { 
+    if (axios.isAxiosError(error)) {
+      const serverMessage = error.response?.data?.message || 'email 또는 비밀번호를 확인해주세요.';
+      throw new Error(serverMessage);
+    }
+    
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('알 수 없는 오류가 발생했습니다.');
+  }
+};
 
 // 구글 로그인 redirecting 적용하기에 일반 username / password 방식과 다름
 export const startGoogleLogin = () : void => {
